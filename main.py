@@ -1,3 +1,6 @@
+#give a code for each player to mean thier peices (two player)
+#make a single player mode
+
 ROWS= 8
 COLS = 8
 board = [[' ' for _ in range(COLS)] for _ in range(ROWS)]
@@ -26,6 +29,7 @@ def otherpeices(board):
     board[7][5] = 'b'
     board[7][6] = 'n'
     board[7][7] = 'r'
+
 def peices():
     otherpeices(board)
     pawns(board)
