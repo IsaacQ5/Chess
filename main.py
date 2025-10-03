@@ -1,45 +1,71 @@
-#give a code for each player to mean thier peices (two player)
-#make a single player mode
-
 ROWS= 8
 COLS = 8
-board = [['--' for _ in range(COLS)] for _ in range(ROWS)]
+boardlayout = [['--' for _ in range(COLS)] for _ in range(ROWS)]
 
-def pawns(board):
-    for pawn in range(len(board[1])):
-        board[1][pawn] = 'BP'
-    for pawn in range(len(board[6])):
-        board[6][pawn] = 'WP'
+#makes the pawns for the board 
+def pawns(boardlayout):
+    for pawn in range(len(boardlayout[1])):
+        boardlayout[1][pawn] = 'BP'
+    for pawn in range(len(boardlayout[6])):
+        boardlayout[6][pawn] = 'WP'
 
-def otherpeices(board):
-    board[0][0] = 'BR'
-    board[0][1] = 'BN'
-    board[0][2] = 'BB'
-    board[0][3] = 'BQ'
-    board[0][4] = 'BK'
-    board[0][5] = 'BB'
-    board[0][6] = 'BN'
-    board[0][7] = 'BR'
+#hard program the other peices
+def otherpeices(boardlayout):
+    boardlayout[0][0] = 'BR'
+    boardlayout[0][1] = 'BN'
+    boardlayout[0][2] = 'BB'
+    boardlayout[0][3] = 'BQ'
+    boardlayout[0][4] = 'BK'
+    boardlayout[0][5] = 'BB'
+    boardlayout[0][6] = 'BN'
+    boardlayout[0][7] = 'BR'
 
-    board[7][0] = 'WR'
-    board[7][1] = 'WN'
-    board[7][2] = 'WB'
-    board[7][3] = 'WQ'
-    board[7][4] = 'WK'
-    board[7][5] = 'WB'
-    board[7][6] = 'WN'
-    board[7][7] = 'WR'
+    boardlayout[7][0] = 'WR'
+    boardlayout[7][1] = 'WN'
+    boardlayout[7][2] = 'WB'
+    boardlayout[7][3] = 'WQ'
+    boardlayout[7][4] = 'WK'
+    boardlayout[7][5] = 'WB'
+    boardlayout[7][6] = 'WN'
+    boardlayout[7][7] = 'WR'
 
+#put the peices in one function
 def peices():
-    otherpeices(board)
-    pawns(board)
+    otherpeices(boardlayout)
+    pawns(boardlayout)
+peices()
 
-def displayboard(board):
-    peices()
-    for line in range(len(board)):
-        print(board[line])
+#function to move the peice to the sqaure it wants to go
+def movePeice(startingRow, startingCol, endRow, endCol):
+    if checkPeice(startingRow, startingCol, endRow, endCol):
+        boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
+        boardlayout[startingRow][startingCol] = '--'
+    else:
+        print("make a valid move")
 
-def Main():
-    displayboard(board)
+#checks if the peice can move 
+def checkPeice(startingRow, startingCol, endRow, endCol):
+    peice = boardlayout[startingRow][startingCol]
+    if peice == 'WP' or peice == "BP":
+        return checkPawn(startingRow, startingCol, endRow, endCol)
 
-Main()
+def checkPawn(startingRow, startingCol, endRow, endCol):
+    if boardlayout[startingRow][startingCol] == 'WP':
+        if startingRow == 6:
+            return 0 < startingRow - endRow <= 2
+        return 0 < startingRow - endRow < 2
+    else:
+        if startingRow == 1:
+            return -2 <= startingRow - endRow < 0
+        return -2 < startingRow - endRow < 0
+#def Main():
+for line in range(len(boardlayout)):
+        print(boardlayout[line])
+while True:
+    SR = int(input("what is the row your peice is on: "))
+    SC = int(input("What is the col that your peice is on: "))
+    ER = int(input("What is the row you want your peice to go: "))
+    EC = int(input("What is the col you want your peice to go: "))
+    movePeice(SR,SC,ER,EC)
+    for line in range(len(boardlayout)):
+        print(boardlayout[line])
