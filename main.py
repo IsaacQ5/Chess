@@ -50,22 +50,59 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
         return checkPawn(startingRow, startingCol, endRow, endCol)
 
 def checkPawn(startingRow, startingCol, endRow, endCol):
+    #movement for the white pawn
     if boardlayout[startingRow][startingCol] == 'WP':
-        if startingRow == 6:
-            return 0 < startingRow - endRow <= 2
-        return 0 < startingRow - endRow < 2
+        #going straight 
+        if (boardlayout[startingRow-1][startingCol]=='--'):
+            if startingRow == 6:
+                   #moving 2 if pawn didnt move 
+                if(boardlayout[startingRow-2][startingCol]=='--'):
+                    return 0 < startingRow - endRow <= 2
+            return 0 < startingRow - endRow < 2
+        else:
+            return NotAMove('pawn')
+    #movement for the black pawn
     else:
-        if startingRow == 1:
-            return -2 <= startingRow - endRow < 0
-        return -2 < startingRow - endRow < 0
-#def Main():
-for line in range(len(boardlayout)):
-        print(boardlayout[line])
-while True:
-    SR = int(input("what is the row your peice is on: "))
-    SC = int(input("What is the col that your peice is on: "))
-    ER = int(input("What is the row you want your peice to go: "))
-    EC = int(input("What is the col you want your peice to go: "))
-    movePeice(SR,SC,ER,EC)
+        #going straight 
+        if (boardlayout[startingRow+1][startingCol]=='--'):
+            if startingRow == 1:
+                #moving 2 if pawn didnt move 
+                if(boardlayout[startingRow-2][startingCol]=='--'):
+                    return -2 <= startingRow - endRow < 0
+            return -2 < startingRow - endRow < 0
+        else:
+            return NotAMove('pawn')
+
+def NotAMove(name):
+    print(f'Piece is blocking the {name}, make a new move')
+    return False
+
+def end(inputs):
+    if inputs == 'kill':
+        print("Program killed")
+        return True
+
+def Main():
     for line in range(len(boardlayout)):
-        print(boardlayout[line])
+            print(boardlayout[line])
+    while True:
+        vaildNumber = list(range(0,9))
+        SR = (input("what is the row your peice is on: "))
+        if (end(SR)):
+            break
+        SC = (input("What is the col that your peice is on: "))
+        if (end(SC)):
+            break
+        ER = (input("What is the row you want your peice to go: "))
+        if (end(ER)):
+            break
+        EC = (input("What is the col you want your peice to go: "))
+        if (end(EC)):
+            break
+        elif (SR in vaildNumber and SC in vaildNumber and ER in vaildNumber and EC in vaildNumber):
+            movePeice(SR,SC,ER,EC)
+            for line in range(len(boardlayout)):
+                print(boardlayout[line])
+        else:
+            print("put in a vaild number")
+Main()
