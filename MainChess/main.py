@@ -33,7 +33,6 @@ def otherpeices(boardlayout):
 def peices():
     otherpeices(boardlayout)
     pawns(boardlayout)
-peices()
 
 #function to move the peice to the sqaure it wants to go
 def movePeice(startingRow, startingCol, endRow, endCol):
@@ -104,21 +103,23 @@ def Main():
             print(boardlayout[line])    
         vaildNumber = list(range(0,9))
         #getting inputs 
-        SR = int(input("what is the row your peice is on: "))
-        if (end(str(SR))):
+        SR = (input("what is the row your peice is on: "))
+        if (end(SR)):
             break
-        SC = int(input("What is the col that your peice is on: "))
-        if (end(str(SC))):
+        SC = (input("What is the col that your peice is on: "))
+        if (end((SC))):
             break
-        ER = int(input("What is the row you want your peice to go: "))
-        if (end(str(ER))):
+        ER = (input("What is the row you want your peice to go: "))
+        if (end((ER))):
             break
-        EC = int(input("What is the col you want your peice to go: "))
-        if (end(str(EC))):
+        EC = (input("What is the col you want your peice to go: "))
+        if (end((EC))):
             break
-        elif (int(SR) in vaildNumber and SC in vaildNumber and ER in vaildNumber and EC in vaildNumber):
-            movePeice(SR,SC,ER,EC)
+        elif (int(SR) in vaildNumber and int(SC) in vaildNumber and int(ER) in vaildNumber and int(EC) in vaildNumber):
+            movePeice(int(SR),int(SC),int(ER),int(EC))
         else:
             print("Put in a vaild number debug 1")
-            
-Main()
+
+if __name__ == "__main__":
+    peices()
+    Main()
