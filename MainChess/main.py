@@ -47,10 +47,63 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
     peice = boardlayout[startingRow][startingCol]
     if peice == 'WP' or peice == "BP":
         return checkPawn(startingRow, startingCol, endRow, endCol)
-
+    elif peice == 'WR' or peice == 'BR':
+        return checkRook(startingRow, startingCol, endRow, endCol)
+    
+def checkRook(startingRow, startingCol, endRow, endCol):
+    
+    if boardlayout[startingRow][startingCol] == 'WR':
+        return whiteRook(startingRow, startingCol, endRow, endCol)
+    
+    else:
+        return blackRook(startingRow, startingCol, endRow, endCol)
+    
+def whiteRook(startingRow, startingCol, endRow, endCol):
+    # For left to Right movement
+    if startingRow == endRow : 
+        #check if there are peices in the way going to the right 
+        if startingCol - endCol < 0:
+            #check each sqaure for the right
+            for col in range(endCol - startingCol-1):
+                if boardlayout[startingRow][startingCol+1 + col] != '--' and 'W' not in boardlayout[endRow][endCol]:
+                    return False
+            return True
+        else:
+            #check each sqaure for the left 
+            for col in range(startingCol - endCol - 1):
+                if boardlayout[startingRow][startingCol-1 -col] != '--' and 'W' not in boardlayout[endRow][endCol]:
+                    return False 
+            return True  
+    elif startingCol == endCol:
+        #check if there are peices in the way going up
+        if startingRow - endRow < 0:
+            #check each sqaure for the going up
+            for row in range(endRow - startingRow-1):
+                if boardlayout[startingRow + 1 + row][startingCol] != '--' and 'W' not in boardlayout[endRow][endCol]:
+                    return False
+            return True
+        #check if there are peices in the way of going down
+        else:
+            #check each sqaure for going down
+            for row in range(startingRow - endRow - 1):
+                if boardlayout[startingRow - endRow - row][startingCol] != '--' and 'W' not in boardlayout[endRow][endCol]:
+                    return False 
+            return True  
+    
+    
+    
 def checkPawn(startingRow, startingCol, endRow, endCol):
     #movement for the white pawn
     if boardlayout[startingRow][startingCol] == 'WP':
+        return whitePawn(startingRow, startingCol, endRow, endCol)
+    
+    
+    #movement for the black pawn
+    else:
+        return blackPawn(startingRow, startingCol, endRow, endCol)
+
+def whitePawn(startingRow, startingCol, endRow, endCol):
+    
      #going straight 
         if (startingCol == endCol and startingRow > endRow):
             #if anything is infront of the peice
@@ -68,12 +121,18 @@ def checkPawn(startingRow, startingCol, endRow, endCol):
             if (startingCol - endCol !=0):
                 if (startingRow > endRow):
                     #checking if a peice is there
-                    if(boardlayout[endRow][endCol] != '--'):
+                    if(boardlayout[endRow][endCol] != '--' and 'W' not in boardlayout[endRow][endCol]):
                         return True
+    # en passant
+        if (startingRow == 3 and endRow == 2 and abs(startingCol - endCol) == 1):
+            if (boardlayout[3][endCol] == 'BP' and boardlayout[2][endCol] == '--'):
+                boardlayout[3][endCol] = '--'
+                return True
+            
         return NotAMove('pawn')
-    #movement for the black pawn
-    else:
-        #going straight 
+                
+def blackPawn(startingRow, startingCol, endRow, endCol):
+    #going straight 
         if (startingCol == endCol and startingRow < endRow):
             #if anything is infront of the peice
             if (boardlayout[startingRow+1][startingCol]=='--'):
@@ -84,16 +143,22 @@ def checkPawn(startingRow, startingCol, endRow, endCol):
                         return True
                 elif startingRow - endRow == -1:    
                     return True
-        elif (startingRow < endRow):
-            #talking a peice
+     #taking a peice
+        if (startingRow < endRow):
+           #only moving one space 
             if (startingCol - endCol!=0):
-                #only moving one space 
                 if (startingRow < endRow):
                     #checking if a peice is there
-                    if(boardlayout[endRow][endCol] != '--'):
+                    if(boardlayout[endRow][endCol] != '--' and 'B' not in boardlayout[endRow][endCol]):
                         return True
-    return NotAMove('pawn')
-
+        
+    #en passant 
+        if (startingRow == 4 and endRow == 5 and abs(startingCol - endCol) == 1):
+            if (boardlayout[4][endCol] == 'WP' and boardlayout[5][endCol] == '--'):
+                boardlayout[4][endCol] = '--'
+                return True
+        return NotAMove('pawn')
+    
 def NotAMove(name):
     print(f'Piece is blocking the {name}')
     return False
