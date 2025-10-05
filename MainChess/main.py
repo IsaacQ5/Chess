@@ -59,15 +59,14 @@ def checkPawn(startingRow, startingCol, endRow, endCol):
                 if startingRow == 6 and startingRow - endRow == 2:
                     #if nothing is front of two sqaures 
                     if(boardlayout[startingRow-2][startingCol]=='--'):
-                        print("here")
                         return True
                 elif startingRow - endRow == 1:    
                     return True
+        #taking a peice 
         elif (startingRow > endRow):
-            #going to the right
-            if (startingCol - endCol<0):
-                #only moving one space 
-                if (startingRow < endRow):
+             #only moving one space 
+            if (startingCol - endCol !=0):
+                if (startingRow > endRow):
                     #checking if a peice is there
                     if(boardlayout[endRow][endCol] != '--'):
                         return True
@@ -75,7 +74,7 @@ def checkPawn(startingRow, startingCol, endRow, endCol):
     #movement for the black pawn
     else:
         #going straight 
-        if (startingRow < endRow):
+        if (startingCol == endCol and startingRow < endRow):
             #if anything is infront of the peice
             if (boardlayout[startingRow+1][startingCol]=='--'):
                 #if the player wants to move 2 squares
@@ -85,6 +84,14 @@ def checkPawn(startingRow, startingCol, endRow, endCol):
                         return True
                 elif startingRow - endRow == -1:    
                     return True
+        elif (startingRow < endRow):
+            #talking a peice
+            if (startingCol - endCol!=0):
+                #only moving one space 
+                if (startingRow < endRow):
+                    #checking if a peice is there
+                    if(boardlayout[endRow][endCol] != '--'):
+                        return True
     return NotAMove('pawn')
 
 def NotAMove(name):
