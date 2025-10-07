@@ -53,45 +53,44 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
 def checkRook(startingRow, startingCol, endRow, endCol):
     
     if boardlayout[startingRow][startingCol] == 'WR':
-        return whiteRook(startingRow, startingCol, endRow, endCol)
+        return RookMove(startingRow, startingCol, endRow, endCol, 'W')
     
     else:
-        return blackRook(startingRow, startingCol, endRow, endCol)
-    
-def whiteRook(startingRow, startingCol, endRow, endCol):
+        return RookMove(startingRow, startingCol, endRow, endCol, 'B')
+
+def RookMove(startingRow, startingCol, endRow, endCol, color):
     # For left to Right movement
     if startingRow == endRow : 
         #check if there are peices in the way going to the right 
         if startingCol - endCol < 0:
             #check each sqaure for the right
-            for col in range(endCol - startingCol-1):
-                if boardlayout[startingRow][startingCol+1 + col] != '--' and 'W' not in boardlayout[endRow][endCol]:
+            for col in range(endCol - startingCol):
+                if boardlayout[startingRow][startingCol+1 + col] != '--' and color in boardlayout[startingRow][startingCol+1 + col]:
                     return False
             return True
         else:
             #check each sqaure for the left 
-            for col in range(startingCol - endCol - 1):
-                if boardlayout[startingRow][startingCol-1 -col] != '--' and 'W' not in boardlayout[endRow][endCol]:
+            for col in range(startingCol - endCol):
+                if boardlayout[startingRow][startingCol-1 -col] != '--' and color in boardlayout[startingRow][startingCol-1 -col]:
                     return False 
             return True  
     elif startingCol == endCol:
         #check if there are peices in the way going up
         if startingRow - endRow < 0:
             #check each sqaure for the going up
-            for row in range(endRow - startingRow-1):
-                if boardlayout[startingRow + 1 + row][startingCol] != '--' and 'W' not in boardlayout[endRow][endCol]:
+            for row in range(endRow - startingRow): 
+                if boardlayout[startingRow + 1 + row][startingCol] != '--' and color in boardlayout[startingRow + 1 + row][startingCol]:
+
                     return False
             return True
         #check if there are peices in the way of going down
         else:
             #check each sqaure for going down
-            for row in range(startingRow - endRow - 1):
-                if boardlayout[startingRow - endRow - row][startingCol] != '--' and 'W' not in boardlayout[endRow][endCol]:
+            for row in range(startingRow - endRow):
+                if boardlayout[startingRow - 1 - row][startingCol] != '--' and color in boardlayout[startingRow - 1 - row][startingCol]:
                     return False 
             return True  
-    
-    
-    
+
 def checkPawn(startingRow, startingCol, endRow, endCol):
     #movement for the white pawn
     if boardlayout[startingRow][startingCol] == 'WP':

@@ -207,6 +207,98 @@ class TestChess(unittest.TestCase):
         boardlayout[4][0] = '--'  # Reset the move for next test
         boardlayout[5][0] = '--'  # Reset the move for next test
     
+    def test_WhiteRookMoves(self):
+        movePeice(6,0,4,0) # white pawn moves two
+        movePeice(7,0,5,0) # white rook move up
+        movePeice(5,0,5,4) # white rook moves to the right 
+        movePeice(5,4,5,3) # white rook moves back
+        movePeice(5,3,3,3) # white rook moves up
+        movePeice(3,3,5,3) # white rook moves back
+        print("Board after test_WhiteRookMoves:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook moved from (7,0) to (5,0)
+        self.assertEqual(boardlayout[5][3], 'WR')
+        boardlayout[5][3] = '--'  # Reset the move for next test
+        boardlayout[4][0] = '--'  # Reset the move for next test
+    
+    def test_BlackRookMoves(self):
+        movePeice(1,0,3,0) # black pawn moves two
+        movePeice(0,0,2,0) # black rook move up
+        movePeice(2,0,2,4) # black rook moves to the right 
+        movePeice(2,4,2,3) # black rook moves back
+        movePeice(2,3,4,3) # black rook moves up
+        movePeice(4,3,2,3) # black rook moves back
+        print("Board after test_BlackRookMoves:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook moved from (0,0) to (2,0)
+        self.assertEqual(boardlayout[2][3], 'BR')
+        boardlayout[2][3] = '--'  # Reset the move for next test
+        boardlayout[3][0] = '--'  # Reset the move for next test
+
+    def test_BlackRooktakingPeice(self):
+        movePeice(1,0,3,0) # black pawn moves two
+        movePeice(0,0,2,0) # black rook move up
+        movePeice(2,0,2,4) # black rook moves to the right
+        movePeice(2,4,6,4) # black rook takes white pawn
+        print("Board after test_BlackRooktakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook moved from (0,0) to (3,0) taking the pawn
+        self.assertEqual(boardlayout[6][4], 'BR')
+        boardlayout[3][0] = '--'  # Reset the move for next test
+        boardlayout[6][4] = '--'  # Reset the move for next test
+    
+    def test_WhiteRooktakingPeice(self):
+        movePeice(6,0,4,0) # white pawn moves two
+        movePeice(7,0,5,0) # white rook move up
+        movePeice(5,0,5,4) # white rook moves to the right 
+        movePeice(5,4,1,4) # white rook takes black pawn
+        print("Board after test_WhiteRooktakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook moved from (7,0) to (3,0) taking the pawn
+        self.assertEqual(boardlayout[1][4], 'WR')
+        boardlayout[4][0] = '--'  # Reset the move for next test
+        boardlayout[1][4] = '--'  # Reset the move for next test
+    
+    def test_invalidWhiteRookTakePeiceVertical(self):
+        movePeice(7,0,6,0) # white rook doesnt take white pawn
+        movePeice(7,0,5,0) # white rook doesnt move up 
+        print("Board after test_invalidWhiteRookTakePeiceVertical:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (7,0) to (6,0) or (5,0)
+        self.assertEqual(boardlayout[7][0], 'WR')
+
+    def test_invalidBlackRookTakePeiceVertical(self):
+        movePeice(0,0,1,0) # black rook doesnt take black pawn
+        movePeice(0,0,2,0) # black rook doesnt move up 
+        print("Board after test_invalidBlackRookTakePeiceVertical:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (0,0) to (1,0) or (2,0)
+        self.assertEqual(boardlayout[0][0], 'BR')
+    
+    def test_invalidWhiteRookTakePeiceHorizontal(self):
+        movePeice(7,0,7,1) # white rook doesnt take white knight
+        movePeice(7,0,7,2) # white rook doesnt move right (checking off by 1 error)
+        print("Board after test_invalidWhiteRookTakePeiceHorizontal:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (7,0) to (7,1) or (7,2)
+        self.assertEqual(boardlayout[7][0], 'WR')
+    
+    def test_invalidBlackRookTakePeiceHorizontal(self):
+        movePeice(0,0,0,1) # black rook doesnt take black knight
+        movePeice(0,0,0,2) # black rook doesnt move right (checking off by 1 error)
+        print("Board after test_invalidBlackRookTakePeiceHorizontal:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (0,0) to (0,1) or (0,2)
+        self.assertEqual(boardlayout[0][0], 'BR')
+    
     
 if __name__ == "__main__":
     unittest.main()
