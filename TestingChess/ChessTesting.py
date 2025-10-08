@@ -299,6 +299,116 @@ class TestChess(unittest.TestCase):
         # Assert that the rook did not move from (0,0) to (0,1) or (0,2)
         self.assertEqual(boardlayout[0][0], 'BR')
     
+    def test_invalidWhiteRookMoveDiagonally(self):
+        movePeice(7,0,6,1) # white rook doesnt move diagonally
+        movePeice(7,0,5,2) # white rook doesnt move diagonally (checking off by 1 error)
+        print("Board after test_invalidWhiteRookMoveDiagonally:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (7,0) to (6,1) or (5,2)
+        self.assertEqual(boardlayout[7][0], 'WR')
     
+    def test_invalidBlackRookMoveDiagonally(self):
+        movePeice(0,0,1,1) # black rook doesnt move diagonally
+        movePeice(0,0,2,2) # black rook doesnt move diagonally (checking off by 1 error)
+        print("Board after test_invalidBlackRookMoveDiagonally:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the rook did not move from (0,0) to (1,1) or (2,2)
+        self.assertEqual(boardlayout[0][0], 'BR')
+        
+    def test_WhiteBishopMoves(self):
+        movePeice(6,1,5,1) # white pawn moves one
+        movePeice(7,2,6,1) # white bishop move diagonally left up
+        movePeice(6,1,4,3) # white bishop moves diagonally right up
+        movePeice(4,3,5,4) # white bishop moves diagonally right down
+        print("Board after test_WhiteBishopMoves:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (7,2) to (3,2)
+        self.assertEqual(boardlayout[5][4], 'WB')
+        boardlayout[5][1] = '--'  # Reset the move for next test
+        boardlayout[5][4] = '--'  # Reset the move for next test
+    
+    def test_BlackBishopMoves(self):
+        movePeice(1,1,2,1) # black pawn moves one
+        movePeice(0,2,1,1) # black bishop move diagonally left down
+        movePeice(1,1,3,3) # black bishop moves diagonally right down
+        movePeice(3,3,2,4) # black bishop moves diagonally right up
+        print("Board after test_BlackBishopMoves:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (0,2) to (2,4)
+        self.assertEqual(boardlayout[2][4], 'BB')
+        boardlayout[2][4] = '--'  # Reset the move for next test
+        boardlayout[2][1] = '--'  # Reset the move for next test
+    
+    def test_WhiteBishopTakingPeice(self):
+        movePeice(6,1,5,1) # white pawn moves one
+        movePeice(7,2,6,1) # white bishop move diagonally left up
+        movePeice(6,1,4,3) # white bishop moves diagonally right up
+        movePeice(4,3,1,0) # white bishop takes black pawn
+        print("Board after test_WhiteBishopTakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (7,2) to (1,0) taking the pawn
+        self.assertEqual(boardlayout[1][0], 'WB')
+        boardlayout[5][1] = '--'  # Reset the move for next test
+        boardlayout[1][0] = '--'  # Reset the move for next test
+    
+    def test_BlackBishopTakingPeice(self):
+        movePeice(1,1,2,1) # black pawn moves one
+        movePeice(0,2,1,1) # black bishop move diagonally left down
+        movePeice(1,1,3,3) # black bishop moves diagonally right down
+        movePeice(3,3,6,4) # black bishop takes white pawn
+        print("Board after test_BlackBishopTakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (0,2) to (6,4) taking the pawn
+        self.assertEqual(boardlayout[6][4], 'BB')
+        boardlayout[2][1] = '--'  # Reset the move for next test
+        boardlayout[6][4] = '--'  # Reset the move for next test
+    
+    def test_invalidWhiteBishopHopsPeice(self):
+        movePeice(7,2,6,1) # white bishop doesnt move
+        movePeice(7,2,5,0) # white bishop doesnt move 
+        print("Board after test_invalidWhiteBishopHopsPeice:")
+        for row in boardlayout:
+            print(row)  
+        # Assert that the bishop did not move from (7,2) to (6,1) or (5,0)
+        self.assertEqual(boardlayout[7][2], 'WB')
+        
+    def test_invalidBlackBishopHopsPeice(self):
+        movePeice(0,2,1,1) # black bishop doesnt move
+        movePeice(0,2,2,0) # black bishop doesnt move 
+        print("Board after test_invalidBlackBishopHopsPeice:")
+        for row in boardlayout:
+            print(row)  
+        # Assert that the bishop did not move from (0,2) to (1,1) or (2,0)
+        self.assertEqual(boardlayout[0][2], 'BB')
+        
+    def test_BlackBishopTakingPeice(self):
+        movePeice(1,1,2,1) # black pawn moves one
+        movePeice(0,2,1,1) # black bishop move diagonally left down
+        movePeice(1,1,6,6) # black bishop moves diagonally right down
+        print("Board after test_BlackBishopTakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (0,2) to (6,4) taking the pawn
+        self.assertEqual(boardlayout[6][6], 'BB')
+        boardlayout[2][1] = '--'  # Reset the move for next test
+        boardlayout[6][6] = '--'  # Reset the move for next test
+    
+    def test_WhiteBishopTakingPeice(self):
+        movePeice(6,1,5,1) # white pawn moves one
+        movePeice(7,2,6,1) # white bishop move diagonally left up
+        movePeice(6,1,1,6) # white bishop moves diagonally right up
+        print("Board after test_WhiteBishopTakingPeice:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the bishop moved from (7,2) to (1,0) taking the pawn
+        self.assertEqual(boardlayout[1][6], 'WB')
+        boardlayout[5][1] = '--'  # Reset the move for next test
+        boardlayout[1][6] = '--'  # Reset the move for next test
 if __name__ == "__main__":
     unittest.main()

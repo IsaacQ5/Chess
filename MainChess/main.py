@@ -49,6 +49,42 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
         return checkPawn(startingRow, startingCol, endRow, endCol)
     elif peice == 'WR' or peice == 'BR':
         return checkRook(startingRow, startingCol, endRow, endCol)
+    elif peice == 'WB' or peice == 'BB':
+        return checkBishop(startingRow, startingCol, endRow, endCol)
+
+def checkBishop(startingRow, startingCol, endRow, endCol):
+    if boardlayout[startingRow][startingCol] == "WB":
+        return BishopMove(startingRow, startingCol, endRow, endCol, "W")
+    else:
+        return BishopMove(startingRow, startingCol, endRow, endCol, "B")
+
+def BishopMove(startingRow, startingCol, endRow, endCol, color):
+    #going to the left up
+    if startingRow - endRow > 0 and startingCol - endCol > 0:
+        for i in range(abs(startingRow - endRow)):
+            if boardlayout[startingRow - 1 - i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow - 1 - i][startingCol - 1 - i]:
+                return False
+            return True 
+    #going to the right up 
+    elif startingRow - endRow > 0 and startingCol - endCol < 0:
+        for i in range(abs(startingRow - endRow)):
+            if boardlayout[startingRow - 1 -i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow - 1 -i][startingCol + 1 + i]:
+                return False
+            return True
+    #Going to the left down
+    elif startingRow - endRow < 0 and startingCol - endCol > 0:
+        for i in range(abs(startingRow - endRow)):
+            if boardlayout[startingRow + 1 +i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol - 1 - i]:
+                return False
+            return True
+    #going to the right down
+    elif startingRow - endRow < 0 and startingCol - endCol < 0:
+        for i in range(abs(startingRow - endRow)):
+            if boardlayout[startingRow + 1 +i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol + 1 + i]:
+                return False
+            return True
+        
+    
     
 def checkRook(startingRow, startingCol, endRow, endCol):
     
