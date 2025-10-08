@@ -12,21 +12,21 @@ def pawns(boardlayout):
 #hard program the other peices
 def otherpeices(boardlayout):
     boardlayout[0][0] = 'BR'
-    boardlayout[0][1] = 'BN'
+    boardlayout[0][1] = 'BK'
     boardlayout[0][2] = 'BB'
     boardlayout[0][3] = 'BQ'
     boardlayout[0][4] = 'BK'
     boardlayout[0][5] = 'BB'
-    boardlayout[0][6] = 'BN'
+    boardlayout[0][6] = 'BK'
     boardlayout[0][7] = 'BR'
 
     boardlayout[7][0] = 'WR'
-    boardlayout[7][1] = 'WN'
+    boardlayout[7][1] = 'WK'
     boardlayout[7][2] = 'WB'
     boardlayout[7][3] = 'WQ'
     boardlayout[7][4] = 'WK'
     boardlayout[7][5] = 'WB'
-    boardlayout[7][6] = 'WN'
+    boardlayout[7][6] = 'WK'
     boardlayout[7][7] = 'WR'
 
 #put the peices in one function
@@ -51,6 +51,54 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
         return checkRook(startingRow, startingCol, endRow, endCol)
     elif peice == 'WB' or peice == 'BB':
         return checkBishop(startingRow, startingCol, endRow, endCol)
+    elif peice == 'WK' or peice == 'BK':
+        return checkKnight(startingRow, startingCol, endRow, endCol)
+    
+def checkKnight(startingRow, startingCol, endRow, endCol):
+    if boardlayout[startingRow][startingCol] == 'WK':
+        return KnightMove(startingRow,startingCol, endRow, endCol, "W")
+    else:
+        return KnightMove(startingRow, startingCol, endRow, endCol, "B")
+
+def KnightMove(startingRow, startingCol, endRow, endCol, color):
+    #going up
+
+    if startingRow - 2 == endRow:
+        #going right 
+        if startingCol + 1 == endCol and color not in boardlayout[endRow][endCol]:
+            return True
+        #going left
+        elif startingCol - 1 == endCol and color not in boardlayout[endRow][endCol]:
+            return True
+        return False 
+    #going down 
+    elif startingRow + 2 == endRow:
+        #going right 
+        if startingCol + 1 == endCol and color not in boardlayout[endRow][endCol]:
+            return True
+        #going left
+        elif startingCol - 1 == endCol and color not in boardlayout[endRow][endCol]:
+            return True
+        return False
+    #going to the right 
+    elif startingCol + 2 == endCol:
+        #going up
+        if startingRow - 1 == endRow and color not in boardlayout[endRow][endCol]:
+            return True
+        #going down
+        elif startingRow + 1 == endRow and color not in boardlayout[endRow][endCol]:
+            return True 
+        return False 
+    #going to the left
+    elif startingCol - 2 == endCol:
+        #going up
+        if startingRow - 1 == endRow and color not in boardlayout[endRow][endCol]:
+            return True
+        #going down
+        elif startingRow + 1 == endRow and color not in boardlayout[endRow][endCol]:
+            return True 
+        return False 
+
 
 def checkBishop(startingRow, startingCol, endRow, endCol):
     if boardlayout[startingRow][startingCol] == "WB":
