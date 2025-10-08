@@ -53,6 +53,18 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
         return checkBishop(startingRow, startingCol, endRow, endCol)
     elif peice == 'WN' or peice == 'BN':
         return checkKnight(startingRow, startingCol, endRow, endCol)
+    elif peice == 'WQ' or peice == 'BQ':
+        return checkQueen(startingRow, startingCol, endRow, endCol)
+
+def checkQueen(startingRow, startingCol, endRow, endCol):
+    if boardlayout[startingRow][startingCol] == 'WQ':
+        if RookMove(startingRow, startingCol, endRow, endCol, "W") or BishopMove(startingRow, startingCol, endRow, endCol, "W"):
+            return True
+        return False
+    else:
+        if RookMove(startingRow, startingCol, endRow, endCol, "B") or BishopMove(startingRow, startingCol, endRow, endCol, "B"):
+            return True
+        return False
     
 def checkKnight(startingRow, startingCol, endRow, endCol):
     if boardlayout[startingRow][startingCol] == 'WN':
