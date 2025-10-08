@@ -435,12 +435,12 @@ class TestChess(unittest.TestCase):
         for row in boardlayout:
             print(row)
         # Assert that the knight moved from (7,1) to (7,7)
-        self.assertEqual(boardlayout[4][2], 'WK')
-        self.assertEqual(boardlayout[4][1], 'BK')
+        self.assertEqual(boardlayout[4][2], 'WN')
+        self.assertEqual(boardlayout[4][1], 'BN')
         boardlayout[4][1] = '--'  # Reset the move for next test
         boardlayout[4][2] = '--'  # Reset the move for next test
-        boardlayout[7][1] = 'WK'  # Reset the move for next test
-        boardlayout[0][1] = 'BK'  # Reset the move for next test
+        boardlayout[7][1] = 'WN'  # Reset the move for next test
+        boardlayout[0][1] = 'BN'  # Reset the move for next test
 
     def test_KnightTakingPeice(self):
         movePeice(7,1,5,2) # white knight moves
@@ -452,11 +452,11 @@ class TestChess(unittest.TestCase):
         for row in boardlayout:
             print(row)
         # Assert that the knight moved from (7,1) to (3,3) taking the pawn and (0,1) to (6,4) taking the pawn
-        self.assertEqual(boardlayout[1][3], 'BK')
+        self.assertEqual(boardlayout[1][3], 'BN')
         self.assertEqual(boardlayout[7][1], '--')
         boardlayout[1][3] = 'BP'  # Reset the move for next test
-        boardlayout[7][1] = 'WK'  # Reset the move for next test
-        boardlayout[0][1] = 'BK'  # Reset the move for next test
+        boardlayout[7][1] = 'WN'  # Reset the move for next test
+        boardlayout[0][1] = 'BN'  # Reset the move for next test
 
     def test_invalidKnightMovesTakesPeice(self):
         movePeice(7,1,6,3) # white knight doesnt move
@@ -465,7 +465,7 @@ class TestChess(unittest.TestCase):
         for row in boardlayout:
             print(row)
         # Assert that the knight doesnt move
-        self.assertEqual(boardlayout[7][1], 'WK')
-        self.assertEqual(boardlayout[0][1], 'BK')
+        self.assertEqual(boardlayout[7][1], 'WN')
+        self.assertEqual(boardlayout[0][1], 'BN')
 if __name__ == "__main__":
     unittest.main()
