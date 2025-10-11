@@ -470,19 +470,34 @@ class TestChess(unittest.TestCase):
         self.assertEqual(boardlayout[0][1], 'BN')
 
     @patch('builtins.input', side_effect=['WQ'])
-    def test_PawnPromotion(self, mock_input):
+    def test_WhitePawnPromotion(self, mock_input):
         movePeice(6,1,4,1) # white Pawn moves two
         movePeice(4,1,3,1) # white Pawn moves one
         movePeice(3,1,2,1) # white Pawn moves one
         movePeice(2,1,1,2) # white Pawn moves one
         movePeice(1,2,0,3) # white Pawn moves one promoting to queen
-        print("Board after test_PawnPromotion:")
+        print("Board after test_WhitePawnPromotion:")
         for row in boardlayout:
             print(row)  
         # Assert that the pawn moved from (6,1) to (0,1) and promoted to queen
         self.assertEqual(boardlayout[0][3], 'WQ')
         boardlayout[0][3] = '--'  # Reset the move for next test
         boardlayout[6][1] = 'WP'  # Reset the move for next test
+        
+    @patch('builtins.input', side_effect=['BN'])
+    def test_BlackPawnPromotion(self, mock_input):
+        movePeice(1,1,3,1) # black Pawn moves two
+        movePeice(3,1,4,1) # black Pawn moves one
+        movePeice(4,1,5,1) # black Pawn moves one
+        movePeice(5,1,6,2) # black Pawn moves one
+        movePeice(6,2,7,3) # black Pawn moves one promoting to knight
+        print("Board after test_BlackPawnPromotion:")
+        for row in boardlayout:
+            print(row)  
+        # Assert that the pawn moved from (1,1) to (7,1) and promoted to knight
+        self.assertEqual(boardlayout[7][3], 'BN')
+        boardlayout[7][3] = '--'  # Reset the move for next test
+        boardlayout[1][1] = 'BP'  # Reset the move for next test
         
 if __name__ == "__main__":
     unittest.main()
