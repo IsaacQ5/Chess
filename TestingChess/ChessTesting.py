@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 import os
 import sys
 
@@ -467,5 +468,21 @@ class TestChess(unittest.TestCase):
         # Assert that the knight doesnt move
         self.assertEqual(boardlayout[7][1], 'WN')
         self.assertEqual(boardlayout[0][1], 'BN')
+
+    @patch('builtins.input', side_effect=['WQ'])
+    def test_PawnPromotion(self, mock_input):
+        movePeice(6,1,4,1) # white Pawn moves two
+        movePeice(4,1,3,1) # white Pawn moves one
+        movePeice(3,1,2,1) # white Pawn moves one
+        movePeice(2,1,1,2) # white Pawn moves one
+        movePeice(1,2,0,3) # white Pawn moves one promoting to queen
+        print("Board after test_PawnPromotion:")
+        for row in boardlayout:
+            print(row)  
+        # Assert that the pawn moved from (6,1) to (0,1) and promoted to queen
+        self.assertEqual(boardlayout[0][3], 'WQ')
+        boardlayout[0][3] = '--'  # Reset the move for next test
+        boardlayout[6][1] = 'WP'  # Reset the move for next test
+        
 if __name__ == "__main__":
     unittest.main()

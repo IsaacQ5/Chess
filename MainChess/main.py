@@ -39,6 +39,11 @@ def movePeice(startingRow, startingCol, endRow, endCol):
     if checkPeice(startingRow, startingCol, endRow, endCol):
         boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
         boardlayout[startingRow][startingCol] = '--'
+        if 'P' in boardlayout[endRow][endCol]:
+            if "W" in boardlayout[endRow][endCol]:
+                PawnPromotion(startingRow, startingCol, endRow, endCol, "W")
+            else:
+                PawnPromotion(startingRow, startingCol, endRow, endCol, "B")
     else:
         print("make a valid move debug 2")
 
@@ -223,7 +228,6 @@ def whitePawn(startingRow, startingCol, endRow, endCol):
             if (boardlayout[3][endCol] == 'BP' and boardlayout[2][endCol] == '--'):
                 boardlayout[3][endCol] = '--'
                 return True
-            
         return NotAMove('pawn')
                 
 def blackPawn(startingRow, startingCol, endRow, endCol):
@@ -253,7 +257,17 @@ def blackPawn(startingRow, startingCol, endRow, endCol):
                 boardlayout[4][endCol] = '--'
                 return True
         return NotAMove('pawn')
-    
+
+def PawnPromotion(startingRow, startingCol, endRow, endCol,color):
+    if color == 'W':
+        if endRow == 0:
+            promotion = input("What do you want to promote your pawn to? (Enter as shorthand)")
+            boardlayout[endRow][endCol] = promotion
+    else:
+        if endRow == 7:
+            promotion = input("What do you want to promote your pawn to? (Enter as shorthand)")
+            boardlayout[endRow][endCol] = promotion
+
 def NotAMove(name):
     print(f'Piece is blocking the {name}')
     return False
