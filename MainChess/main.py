@@ -37,29 +37,88 @@ def peices():
 #function to move the peice to the sqaure it wants to go
 def movePeice(startingRow, startingCol, endRow, endCol):
     if checkPeice(startingRow, startingCol, endRow, endCol):
-        boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
-        boardlayout[startingRow][startingCol] = '--'
-        if 'P' in boardlayout[endRow][endCol]:
-            if "W" in boardlayout[endRow][endCol]:
-                PawnPromotion(startingRow, startingCol, endRow, endCol, "W")
+        if KingInCheck():
+            if 'K' in boardlayout[startingRow][startingCol]:
+                boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
+                boardlayout[startingRow][startingCol] = '--' 
             else:
-                PawnPromotion(startingRow, startingCol, endRow, endCol, "B")
+                print('Your king is in check')
+        else:  
+            boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
+            boardlayout[startingRow][startingCol] = '--'
+            if 'P' in boardlayout[endRow][endCol]:
+                if "W" in boardlayout[endRow][endCol]:
+                    PawnPromotion(startingRow, startingCol, endRow, endCol, "W")
+                else:
+                    PawnPromotion(startingRow, startingCol, endRow, endCol, "B")
     else:
         print("make a valid move debug 2")
+
+def KingInCheck():
+    #find the kings
+    WhiteKingRow = 0
+    WhiteKingCol = 0
+    BlackKingRow = 0
+    BlackKingCol = 0
+    #To break out of the loop when both kings are found
+    FoundWK = False
+    FoundBK = False
+    #loops for king searching
+    for row in range(ROWS):
+        for col in range(COLS):
+            if boardlayout[row][col] == 'WK':
+                WhiteKingRow = row
+                WhiteKingCol = col
+                FoundWK = True
+            elif boardlayout[row][col] == 'BK':
+                BlackKingRow = row
+                BlackKingCol = col
+                FoundBK = True
+            if FoundWK and FoundBK:
+                break
+    
+    for row in range(ROWS):
+        for col in range(COLS):
+            if checkPeice(row, col, WhiteKingRow, WhiteKingCol) or checkPeice(row, col, BlackKingRow, BlackKingCol):
+                print(f"{boardlayout[row][col]} ({row},{col}) is putting the king check")
+                print(f"White King is at ({WhiteKingRow},{WhiteKingCol})")
+                print(f"Black King is at ({BlackKingRow},{BlackKingCol})")
+                return True
+    return False
 
 #checks if the peice can move 
 def checkPeice(startingRow, startingCol, endRow, endCol):
     peice = boardlayout[startingRow][startingCol]
+    #Pawn moves
     if peice == 'WP' or peice == "BP":
         return checkPawn(startingRow, startingCol, endRow, endCol)
+    #Rook moves
     elif peice == 'WR' or peice == 'BR':
         return checkRook(startingRow, startingCol, endRow, endCol)
+    #Bishop moves
     elif peice == 'WB' or peice == 'BB':
         return checkBishop(startingRow, startingCol, endRow, endCol)
+    #Knight moves
     elif peice == 'WN' or peice == 'BN':
         return checkKnight(startingRow, startingCol, endRow, endCol)
+    #Queen moves
     elif peice == 'WQ' or peice == 'BQ':
         return checkQueen(startingRow, startingCol, endRow, endCol)
+    #King moves
+    elif peice == 'WK' or peice == 'BK':
+        return checkKing(startingRow, startingCol, endRow, endCol)
+    else:
+        return False 
+
+def checkKing(startingRow, startingCol, endRow, endCol):
+    if [startingRow, startingCol] != [endRow, endCol]:
+        if (abs(startingRow - endRow) == 1 or startingRow - endRow == 0) and (abs(startingCol - endCol) == 1 or startingCol - endCol == 0): 
+            if 'W' not in boardlayout[endRow][endCol]:
+                return True 
+            elif 'B' not in boardlayout[endRow][endCol]:
+                return True
+            return False
+        return False 
 
 def checkQueen(startingRow, startingCol, endRow, endCol):
     if boardlayout[startingRow][startingCol] == 'WQ':
@@ -83,6 +142,7 @@ def KnightMove(startingRow, startingCol, endRow, endCol, color):
     if startingRow - 2 == endRow:
         #going right 
         if startingCol + 1 == endCol and color not in boardlayout[endRow][endCol]:
+
             return True
         #going left
         elif startingCol - 1 == endCol and color not in boardlayout[endRow][endCol]:
@@ -218,7 +278,7 @@ def whitePawn(startingRow, startingCol, endRow, endCol):
         #taking a peice 
         elif (startingRow > endRow):
              #only moving one space 
-            if (startingCol - endCol !=0):
+            if (abs(startingCol - endCol)==0):
                 if (startingRow > endRow):
                     #checking if a peice is there
                     if(boardlayout[endRow][endCol] != '--' and 'W' not in boardlayout[endRow][endCol]):
@@ -243,9 +303,9 @@ def blackPawn(startingRow, startingCol, endRow, endCol):
                 elif startingRow - endRow == -1:    
                     return True
      #taking a peice
-        if (startingRow < endRow):
+        if (startingRow - endRow == 1):
            #only moving one space 
-            if (startingCol - endCol!=0):
+            if (abs(startingCol - endCol)==1):
                 if (startingRow < endRow):
                     #checking if a peice is there
                     if(boardlayout[endRow][endCol] != '--' and 'B' not in boardlayout[endRow][endCol]):
@@ -273,7 +333,6 @@ def PawnPromotion(startingRow, startingCol, endRow, endCol,color):
             boardlayout[endRow][endCol] = promotion
 
 def NotAMove(name):
-    print(f'Piece is blocking the {name}')
     return False
 
 def end(inputs):

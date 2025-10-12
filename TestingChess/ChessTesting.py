@@ -499,5 +499,43 @@ class TestChess(unittest.TestCase):
         boardlayout[7][3] = '--'  # Reset the move for next test
         boardlayout[1][1] = 'BP'  # Reset the move for next test
         
+    def test_Kingmovement(self):
+        movePeice(6,4,4,4) # move white pawn two 
+        movePeice(7,4,6,4) # move white king one 
+        movePeice(6,4,5,4) # move white king one
+        movePeice(5,4,5,3) # move white king one
+        movePeice(5,3,4,2) # move white king one 
+        print("Board after test_Kingmovement")
+        for row in boardlayout:
+            print(row)
+        #Assert that the king moved all the directions 
+        self.assertEqual(boardlayout[4][2], 'WK')
+        boardlayout[4][2] = '--'
+        boardlayout[4][4] = '--'
+        boardlayout[6][4] = 'WP'
+        boardlayout[7][4] = 'WK'
+    
+    def test_kingcheck(self):
+        movePeice(6,4,4,4) # move white pawn two 
+        movePeice(7,4,6,4) # move white king one 
+        movePeice(6,4,5,4) # move white king one
+        movePeice(5,4,5,3) # move white king one
+        movePeice(5,3,4,2) # move white king one 
+        movePeice(1,3,3,3) # move black pawn to put into check 
+        movePeice(6,6,6,4) # does not move pawn bc of check
+        print("board after test_kingcheck")
+        for row in boardlayout:
+            print(row)
+        #Assert to test king check 
+        self.assertEqual(boardlayout[6][4], 'WP')
+        self.assertEqual(boardlayout[3][3], 'BP')
+        self.assertEqual(boardlayout[4][2], 'WK')
+        boardlayout[4][2] = '--'
+        boardlayout[4][4] = '--'
+        boardlayout[3][3] = '--'
+        boardlayout[6][4] = 'WP'
+        boardlayout[7][4] = 'WK'
+        boardlayout[1][3] = 'BP'
+
 if __name__ == "__main__":
     unittest.main()
