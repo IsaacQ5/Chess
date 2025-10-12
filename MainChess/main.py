@@ -262,10 +262,14 @@ def PawnPromotion(startingRow, startingCol, endRow, endCol,color):
     if color == 'W':
         if endRow == 0:
             promotion = input("What do you want to promote your pawn to? (Enter as shorthand)")
+            while promotion not in ['WR', 'WN', 'WB', 'WQ']:
+                promotion = input("Invalid choice. Please enter WR, WN, WB, or WQ: ")
             boardlayout[endRow][endCol] = promotion
     else:
         if endRow == 7:
             promotion = input("What do you want to promote your pawn to? (Enter as shorthand)")
+            while promotion not in ['BR', 'BN', 'BB', 'BQ']:
+                promotion = input("Invalid choice. Please enter BR, BN, BB, or BQ: ")
             boardlayout[endRow][endCol] = promotion
 
 def NotAMove(name):
