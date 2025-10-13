@@ -190,36 +190,36 @@ def BishopMove(startingRow, startingCol, endRow, endCol, color):
     #going to the left up
     if startingRow - endRow > 0 and startingCol - endCol > 0:
         for i in range(abs(startingRow - endRow)):
-            if boardlayout[startingRow - 1 - i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow - 1 - i][startingCol - 1 - i]:
+            if ((startingRow - 1- i) < 0 or (startingCol -1 -i)<0) or boardlayout[startingRow - 1 - i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow - 1 - i][startingCol - 1 - i]:
                 return False
-        if boardlayout[startingRow - abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+        if (startingRow - abs(startingRow - endRow) < 0 or startingCol - abs(startingRow - endRow) < 0) or boardlayout[startingRow - abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
             return False
         print("left up")
         return True 
     #going to the right up 
     elif startingRow - endRow > 0 and startingCol - endCol < 0:
         for i in range(abs(startingRow - endRow)):
-            if boardlayout[startingRow - 1 -i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow - 1 -i][startingCol + 1 + i]:
+            if ((startingRow - 1 - i) < 0 or (startingCol + 1 + i) > 7) or boardlayout[startingRow - 1 -i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow - 1 -i][startingCol + 1 + i]:
                 return False
-        if boardlayout[startingRow - abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+        if (startingRow - abs(startingRow - endRow) < 0 or startingCol + abs(startingRow - endRow) > 7) or  boardlayout[startingRow - abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
             return False
         print("right up")
         return True
     #Going to the left down
     elif startingRow - endRow < 0 and startingCol - endCol > 0:
         for i in range(abs(startingRow - endRow)):
-            if boardlayout[startingRow + 1 +i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol - 1 - i]:
+            if ((startingRow +1 +i) >7 or (startingCol -1 -i)<0) or boardlayout[startingRow + 1 +i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol - 1 - i]:
                 return False
-        if boardlayout[startingRow + abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+        if (startingRow + abs(startingRow - endRow) > 7 or startingCol - abs(startingRow - endRow)< 0) or  boardlayout[startingRow + abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
             return False
         print("left down")
         return True
     #going to the right down
     elif startingRow - endRow < 0 and startingCol - endCol < 0:
         for i in range(abs(startingRow - endRow)):
-            if boardlayout[startingRow + 1 +i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol + 1 + i]:
+            if  ((startingRow + 1 + i) > 7 or (startingCol + 1 + i) > 7) or boardlayout[startingRow + 1 +i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol + 1 + i]:
                 return False
-        if boardlayout[startingRow + abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+        if ((startingRow + abs(startingRow - endRow)) > 7 or (startingCol + abs(startingRow - endRow) > 7)) or boardlayout[startingRow + abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
             return False 
         print("right down")
         return True
@@ -256,7 +256,6 @@ def RookMove(startingRow, startingCol, endRow, endCol, color):
             #check each sqaure for the going up
             for row in range(endRow - startingRow): 
                 if boardlayout[startingRow + 1 + row][startingCol] != '--' and color in boardlayout[startingRow + 1 + row][startingCol]:
-
                     return False
             return True
         #check if there are peices in the way of going down
