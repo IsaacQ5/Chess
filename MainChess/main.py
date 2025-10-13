@@ -241,29 +241,33 @@ def RookMove(startingRow, startingCol, endRow, endCol, color):
         if startingCol - endCol < 0:
             #check each sqaure for the right
             for col in range(endCol - startingCol):
-                if boardlayout[startingRow][startingCol+1 + col] != '--' and color in boardlayout[startingRow][startingCol+1 + col]:
-                    return False
+                if boardlayout[startingRow][startingCol+1 + col] != '--':
+                    if boardlayout[startingRow][startingCol + abs(endCol - startingCol)] != boardlayout[startingRow][startingCol+1 + col] or color in boardlayout[startingRow][startingCol+1 + col]:
+                        return False
             return True
         else:
             #check each sqaure for the left 
             for col in range(startingCol - endCol):
-                if boardlayout[startingRow][startingCol-1 -col] != '--' and color in boardlayout[startingRow][startingCol-1 -col]:
-                    return False 
+                if boardlayout[startingRow][startingCol-1 -col] != '--':
+                    if boardlayout[startingRow][startingCol - abs(startingCol - endCol)] != boardlayout[startingRow][startingCol -1 -col] or color in boardlayout[startingRow][startingCol-1 -col]:
+                        return False 
             return True  
     elif startingCol == endCol:
         #check if there are peices in the way going up
         if startingRow - endRow < 0:
             #check each sqaure for the going up
             for row in range(endRow - startingRow): 
-                if boardlayout[startingRow + 1 + row][startingCol] != '--' and color in boardlayout[startingRow + 1 + row][startingCol]:
-                    return False
+                if boardlayout[startingRow + 1 + row][startingCol] != '--':
+                    if boardlayout[startingRow + abs(endRow- startingRow)][startingCol] != boardlayout[startingRow + 1 + row][startingCol] or color in boardlayout[startingRow + 1 + row][startingCol]:
+                        return False
             return True
         #check if there are peices in the way of going down
         else:
             #check each sqaure for going down
             for row in range(startingRow - endRow):
-                if boardlayout[startingRow - 1 - row][startingCol] != '--' and color in boardlayout[startingRow - 1 - row][startingCol]:
-                    return False 
+                if boardlayout[startingRow - 1 - row][startingCol] != '--':
+                    if boardlayout[startingRow - abs(endRow- startingRow)][startingCol] != boardlayout[startingRow - 1 - row][startingCol] or color in boardlayout[startingRow - 1 - row][startingCol]:
+                        return False 
             return True  
 
 def checkPawn(startingRow, startingCol, endRow, endCol):
