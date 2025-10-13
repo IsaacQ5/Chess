@@ -79,9 +79,12 @@ def KingInCheck():
     
     for row in range(ROWS):
         for col in range(COLS):
-            if checkPeice(row, col, WhiteKingRow, WhiteKingCol) or checkPeice(row, col, BlackKingRow, BlackKingCol):
-                print(f"{boardlayout[row][col]} ({row},{col}) is putting the king check")
+            if checkPeice(row, col, WhiteKingRow, WhiteKingCol):
+                print(f"{boardlayout[row][col]} ({row},{col}) is putting the white king check")
                 print(f"White King is at ({WhiteKingRow},{WhiteKingCol})")
+                return True
+            elif checkPeice(row, col, BlackKingRow, BlackKingCol):
+                print(f"{boardlayout[row][col]} ({row},{col}) is putting the black king check")
                 print(f"Black King is at ({BlackKingRow},{BlackKingCol})")
                 return True
     return False
@@ -189,25 +192,37 @@ def BishopMove(startingRow, startingCol, endRow, endCol, color):
         for i in range(abs(startingRow - endRow)):
             if boardlayout[startingRow - 1 - i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow - 1 - i][startingCol - 1 - i]:
                 return False
-            return True 
+        if boardlayout[startingRow - abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+            return False
+        print("left up")
+        return True 
     #going to the right up 
     elif startingRow - endRow > 0 and startingCol - endCol < 0:
         for i in range(abs(startingRow - endRow)):
             if boardlayout[startingRow - 1 -i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow - 1 -i][startingCol + 1 + i]:
                 return False
-            return True
+        if boardlayout[startingRow - abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+            return False
+        print("right up")
+        return True
     #Going to the left down
     elif startingRow - endRow < 0 and startingCol - endCol > 0:
         for i in range(abs(startingRow - endRow)):
             if boardlayout[startingRow + 1 +i][startingCol - 1 - i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol - 1 - i]:
                 return False
-            return True
+        if boardlayout[startingRow + abs(startingRow - endRow)][startingCol - abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+            return False
+        print("left down")
+        return True
     #going to the right down
     elif startingRow - endRow < 0 and startingCol - endCol < 0:
         for i in range(abs(startingRow - endRow)):
             if boardlayout[startingRow + 1 +i][startingCol + 1 + i] != '--' and color in boardlayout[startingRow + 1 +i][startingCol + 1 + i]:
                 return False
-            return True
+        if boardlayout[startingRow + abs(startingRow - endRow)][startingCol + abs(startingRow - endRow)] != boardlayout[endRow][endCol]:
+            return False 
+        print("right down")
+        return True
         
     
     
