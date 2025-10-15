@@ -294,9 +294,9 @@ def whitePawn(startingRow, startingCol, endRow, endCol):
                 elif startingRow - endRow == 1:    
                     return True
         #taking a peice 
-        elif (startingRow > endRow):
+        elif (startingRow - endRow == 1):
              #only moving one space 
-            if (abs(startingCol - endCol)==0):
+            if (abs(startingCol - endCol)==1):
                 if (startingRow > endRow):
                     #checking if a peice is there
                     if(boardlayout[endRow][endCol] != '--' and 'W' not in boardlayout[endRow][endCol]):
@@ -321,7 +321,7 @@ def blackPawn(startingRow, startingCol, endRow, endCol):
                 elif startingRow - endRow == -1:    
                     return True
      #taking a peice
-        if (startingRow - endRow == 1):
+        if (startingRow - endRow == -1):
            #only moving one space 
             if (abs(startingCol - endCol)==1):
                 if (startingRow < endRow):
