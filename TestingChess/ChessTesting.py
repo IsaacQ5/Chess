@@ -13,7 +13,7 @@ if project_root not in sys.path:
     
     
     
-from MainChess.main import peices, movePeice, boardlayout  
+from MainChess.main import peices, movePeice, boardlayout
 
     
 class TestChess(unittest.TestCase):
@@ -23,7 +23,8 @@ class TestChess(unittest.TestCase):
         # Initialize the board before each test
     # Each test method must start with 'test_'
     def test_movePawnTwo(self):
-        movePeice(1,0,3,0)
+        movePeice(6,0,4,0)  # Move white pawn forward
+        movePeice(1,0,3,0) # Move black pawn forward
         print("Board after test_movePawnTwo:")
         for row in boardlayout:
             print(row)
@@ -31,9 +32,11 @@ class TestChess(unittest.TestCase):
         self.assertEqual(boardlayout[1][0], '--')
         self.assertEqual(boardlayout[3][0], 'BP')
         boardlayout[3][0] = '--'  # Reset the move for next test
+        boardlayout[4][0] = '--'  # Reset the move for next test
     
     def test_movePawnOne(self):
-        movePeice(1,1,2,1)
+        movePeice(6,1,5,1)  # Move white pawn forward
+        movePeice(1,1,2,1) # Move black pawn forward
         print("Board after test_movePawnOne:")
         for row in boardlayout:
             print(row)
@@ -41,8 +44,10 @@ class TestChess(unittest.TestCase):
         self.assertEqual(boardlayout[1][1], '--')
         self.assertEqual(boardlayout[2][1], 'BP')
         boardlayout[2][1] = '--'  # Reset the move for next test
+        boardlayout[5][1] = '--'  # Reset the move for next test
     
     def test_PawnintoPawn(self):
+        movePeice(6,6,4,6)  # Move white pawn forward
         movePeice(1,1,3,1)  # Move black pawn forward
         movePeice(6,1,4,1)  # Move white pawn forward
         movePeice(3,1,4,1)  # black should not move 
@@ -55,6 +60,7 @@ class TestChess(unittest.TestCase):
         self.assertEqual(boardlayout[3][1], 'BP')
         boardlayout[3][1] = '--'  # Reset the move for next test
         boardlayout[4][1] = '--'  # Reset the move for next test
+        boardlayout[4][6] = '--'  # Reset the move for next test
     
     def test_BlackpawnTakesWhitepawn(self):
         movePeice(1,1,3,1)  # Move black pawn forward
@@ -522,12 +528,12 @@ class TestChess(unittest.TestCase):
         movePeice(5,4,5,3) # move white king one
         movePeice(5,3,4,2) # move white king one 
         movePeice(1,3,3,3) # move black pawn to put into check 
-        movePeice(6,6,6,4) # does not move pawn bc of check
+        movePeice(4,4,3,4) # does not move pawn bc of check
         print("board after test_kingcheck")
         for row in boardlayout:
             print(row)
         #Assert to test king check 
-        self.assertEqual(boardlayout[6][4], 'WP')
+        self.assertEqual(boardlayout[4][4], 'WP')
         self.assertEqual(boardlayout[3][3], 'BP')
         self.assertEqual(boardlayout[4][2], 'WK')
         boardlayout[4][2] = '--'
@@ -536,6 +542,33 @@ class TestChess(unittest.TestCase):
         boardlayout[6][4] = 'WP'
         boardlayout[7][4] = 'WK'
         boardlayout[1][3] = 'BP'
+    
+    def test_pin(self):
+        movePeice(1,4,2,4) # move black pawn two
+        movePeice(0,3,4,7) # move black queen to pin the pawn
+        movePeice(6,4,5,4) # move white pawn two
+        movePeice(7,4,6,4) # move white king one
+        movePeice(6,4,5,3) # move white king one
+        movePeice(5,4,4,4) # move white pawn one 
+        movePeice(5,3,4,3) # move white king one
+        movePeice(4,4,3,4) # Pawn does not move because of pin
+        print("board after test_pin")
+        for row in boardlayout:
+            print(row)
+        #Assert to test pin
+        self.assertEqual(boardlayout[4][4], 'WP')
+        self.assertEqual(boardlayout[3][4], '--')
+    
+    def test_invalidKingMove(self):
+        movePeice(7,4,5,4) # white king tries to move two spaces
+        movePeice(7,4,7,6) # white king tries to move three spaces
+        movePeice(7,4,6,4) # white king should not take pawn
+        print("Board after test_invalidKingMove:")
+        for row in boardlayout:
+            print(row)
+        # Assert that the king did not move from (7,4) to (5,4) or (7,6)
+        self.assertEqual(boardlayout[7][4], 'WK')
+
 
 if __name__ == "__main__":
     unittest.main()

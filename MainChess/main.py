@@ -1,6 +1,7 @@
 ROWS= 8
 COLS = 8
 boardlayout = [['--' for _ in range(COLS)] for _ in range(ROWS)]
+TURN = 0
 
 #makes the pawns for the board 
 def pawns(boardlayout):
@@ -36,21 +37,20 @@ def peices():
 
 #function to move the peice to the sqaure it wants to go
 def movePeice(startingRow, startingCol, endRow, endCol):
+    SavedPeice = boardlayout[endRow][endCol]
     if checkPeice(startingRow, startingCol, endRow, endCol):
-        if KingInCheck():
-            if 'K' in boardlayout[startingRow][startingCol]:
-                boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
-                boardlayout[startingRow][startingCol] = '--' 
+        boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
+        boardlayout[startingRow][startingCol] = '--'
+        if 'P' in boardlayout[endRow][endCol]:
+            if "W" in boardlayout[endRow][endCol]:
+                PawnPromotion(endRow, endCol, "W")
             else:
-                print('Your king is in check')
-        else:  
-            boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]
-            boardlayout[startingRow][startingCol] = '--'
-            if 'P' in boardlayout[endRow][endCol]:
-                if "W" in boardlayout[endRow][endCol]:
-                    PawnPromotion(startingRow, startingCol, endRow, endCol, "W")
-                else:
-                    PawnPromotion(startingRow, startingCol, endRow, endCol, "B")
+                PawnPromotion(endRow, endCol, "B")
+    if KingInCheck():
+        print("That move put your king in check, make a valid move")
+        boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
+        boardlayout[endRow][endCol] = SavedPeice
+        TURN -= 1
     else:
         print("make a valid move debug 2")
 
@@ -79,11 +79,11 @@ def KingInCheck():
     
     for row in range(ROWS):
         for col in range(COLS):
-            if checkPeice(row, col, WhiteKingRow, WhiteKingCol):
+            if checkPeice(row, col, WhiteKingRow, WhiteKingCol) and TURN % 2 == 0:
                 print(f"{boardlayout[row][col]} ({row},{col}) is putting the white king check")
                 print(f"White King is at ({WhiteKingRow},{WhiteKingCol})")
                 return True
-            elif checkPeice(row, col, BlackKingRow, BlackKingCol):
+            elif checkPeice(row, col, BlackKingRow, BlackKingCol) and TURN % 2 == 1:
                 print(f"{boardlayout[row][col]} ({row},{col}) is putting the black king check")
                 print(f"Black King is at ({BlackKingRow},{BlackKingCol})")
                 return True
@@ -116,12 +116,13 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
 def checkKing(startingRow, startingCol, endRow, endCol):
     if [startingRow, startingCol] != [endRow, endCol]:
         if (abs(startingRow - endRow) == 1 or startingRow - endRow == 0) and (abs(startingCol - endCol) == 1 or startingCol - endCol == 0): 
-            if 'W' not in boardlayout[endRow][endCol]:
+            if 'W' in boardlayout[startingRow][startingCol] and 'W' not in boardlayout[endRow][endCol]:
                 return True 
-            elif 'B' not in boardlayout[endRow][endCol]:
+            elif 'B' in boardlayout[startingRow][startingCol] and'B' not in boardlayout[endRow][endCol]:
                 return True
             return False
         return False 
+    return False 
 
 def checkQueen(startingRow, startingCol, endRow, endCol):
     if boardlayout[startingRow][startingCol] == 'WQ':
@@ -336,7 +337,7 @@ def blackPawn(startingRow, startingCol, endRow, endCol):
                 return True
         return NotAMove('pawn')
 
-def PawnPromotion(startingRow, startingCol, endRow, endCol,color):
+def PawnPromotion(endRow, endCol,color):
     if color == 'W':
         if endRow == 0:
             promotion = input("What do you want to promote your pawn to? (Enter as shorthand)")
@@ -359,12 +360,14 @@ def end(inputs):
         return True
 
 def Main():
+    global TURN
     while True:
         #for formating the list into a board 
         for line in range(len(boardlayout)):
             print(boardlayout[line])    
         vaildNumber = list(range(0,9))
         #getting inputs 
+        print("Where would White like to move" if TURN % 2 == 0 else "Where would Black like to move")
         SR = (input("what is the row your peice is on: "))
         if (end(SR)):
             break
@@ -378,10 +381,16 @@ def Main():
         if (end((EC))):
             break
         elif (int(SR) in vaildNumber and int(SC) in vaildNumber and int(ER) in vaildNumber and int(EC) in vaildNumber):
-            movePeice(int(SR),int(SC),int(ER),int(EC))
+            if TURN % 2 == 0 and 'W' in boardlayout[int(SR)][int(SC)]:
+                movePeice(int(SR),int(SC),int(ER),int(EC))
+                TURN += 1
+            elif TURN % 2 == 1 and 'B' in boardlayout[int(SR)][int(SC)]:
+                movePeice(int(SR),int(SC),int(ER),int(EC))
+                TURN += 1
+            else: 
+                print("That is not your peice")
         else:
             print("Put in a vaild number debug 1")
-
 if __name__ == "__main__":
     peices()
     Main()
