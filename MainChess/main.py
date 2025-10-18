@@ -37,6 +37,7 @@ def peices():
 
 #function to move the peice to the sqaure it wants to go
 def movePeice(startingRow, startingCol, endRow, endCol):
+    global TURN
     SavedPeice = boardlayout[endRow][endCol]
     if checkPeice(startingRow, startingCol, endRow, endCol):
         boardlayout[endRow][endCol] = boardlayout[startingRow][startingCol]

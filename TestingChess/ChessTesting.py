@@ -13,7 +13,10 @@ if project_root not in sys.path:
     
     
     
-from MainChess.main import peices, movePeice, boardlayout
+from MainChess import main
+peices = main.peices
+movePeice = main.movePeice
+boardlayout = main.boardlayout
 
     
 class TestChess(unittest.TestCase):
@@ -245,18 +248,37 @@ class TestChess(unittest.TestCase):
         boardlayout[3][0] = '--'  # Reset the move for next test
 
     def test_BlackRooktakingPeice(self):
+        movePeice(6,4,4,4) # white pawn moves two
+        main.TURN += 1
         movePeice(1,0,3,0) # black pawn moves two
+        main.TURN += 1
+        movePeice(4,4,3,4) # white pawn moves one
+        main.TURN += 1
         movePeice(0,0,2,0) # black rook move up
+        main.TURN += 1
+        movePeice(6,7,5,7) # white pawn up
+        main.TURN += 1
         movePeice(2,0,2,4) # black rook moves to the right
-        movePeice(2,4,6,4) # black rook takes white pawn
+        main.TURN += 1
+        movePeice(5,7,4,7) # white pawn up
+        main.TURN += 1
+        movePeice(2,4,3,4) # black rook takes white pawn
+        main.TURN += 1
         print("Board after test_BlackRooktakingPeice:")
         for row in boardlayout:
             print(row)
         # Assert that the rook moved from (0,0) to (3,0) taking the pawn
-        self.assertEqual(boardlayout[6][4], 'BR')
+        self.assertEqual(boardlayout[3][4], 'BR')
+        boardlayout[3][4] = '--'  # Reset the move for next test
+        boardlayout[2][4] = '--'  # Reset the move for next test
+        boardlayout[6][4] = 'WP'  # Reset the move for next test
+        boardlayout[4][7] = '--'  # Reset the move for next test
+        boardlayout[0][0] = 'BR'  # Reset the move for next test
+        boardlayout[1][0] = 'BP'  # Reset the move for next test
         boardlayout[3][0] = '--'  # Reset the move for next test
-        boardlayout[6][4] = '--'  # Reset the move for next test
-    
+        boardlayout[6][7] = 'WP'  # Reset the move for next test
+        main.TURN = 0
+
     def test_WhiteRooktakingPeice(self):
         movePeice(6,0,4,0) # white pawn moves two
         movePeice(7,0,5,0) # white rook move up
@@ -523,25 +545,43 @@ class TestChess(unittest.TestCase):
     
     def test_kingcheck(self):
         movePeice(6,4,4,4) # move white pawn two 
+        main.TURN += 1
+        movePeice(1,3,3,3) # move black pawn one
+        main.TURN += 1
         movePeice(7,4,6,4) # move white king one 
+        main.TURN += 1
+        movePeice(1,0,2,0) # move black pawn one
+        main.TURN += 1
         movePeice(6,4,5,4) # move white king one
-        movePeice(5,4,5,3) # move white king one
-        movePeice(5,3,4,2) # move white king one 
-        movePeice(1,3,3,3) # move black pawn to put into check 
-        movePeice(4,4,3,4) # does not move pawn bc of check
+        main.TURN += 1
+        movePeice(3,3,4,3) # move black pawn one
+        main.TURN += 1
+        movePeice(5,4,4,4) # move white king one
+        main.TURN += 1
+        movePeice(2,0,3,0) # move black pawn one (should move)
+        main.TURN += 1
+        movePeice(6,7,6,5) # Pawn should not move
+        main.TURN += 1
+        movePeice(3,0,4,0) # move black pawn one 
+        main.TURN += 1
+        movePeice(4,4,4,5) # move white king one (should move)
+        main.TURN += 1
         print("board after test_kingcheck")
         for row in boardlayout:
             print(row)
         #Assert to test king check 
-        self.assertEqual(boardlayout[4][4], 'WP')
-        self.assertEqual(boardlayout[3][3], 'BP')
+        self.assertEqual(boardlayout[4][5], 'WK')
+        self.assertEqual(boardlayout[6][7], 'WP')
         self.assertEqual(boardlayout[4][2], 'WK')
-        boardlayout[4][2] = '--'
         boardlayout[4][4] = '--'
-        boardlayout[3][3] = '--'
         boardlayout[6][4] = 'WP'
-        boardlayout[7][4] = 'WK'
+        boardlayout[3][3] = '--'
         boardlayout[1][3] = 'BP'
+        boardlayout[4][0] = '--'
+        boardlayout[1][0] = 'BP'
+        boardlayout[7][4] = 'WK'
+        main.TURN = 0
+
     
     def test_pin(self):
         movePeice(1,4,2,4) # move black pawn two
