@@ -556,49 +556,86 @@ class TestChess(unittest.TestCase):
         main.TURN += 1
         movePeice(3,3,4,3) # move black pawn one
         main.TURN += 1
-        movePeice(5,4,4,4) # move white king one
-        main.TURN += 1
-        movePeice(2,0,3,0) # move black pawn one (should move)
-        main.TURN += 1
         movePeice(6,7,6,5) # Pawn should not move
         main.TURN += 1
         movePeice(3,0,4,0) # move black pawn one 
         main.TURN += 1
-        movePeice(4,4,4,5) # move white king one (should move)
+        movePeice(5,4,5,5) # move white king one (should move)'''
         main.TURN += 1
         print("board after test_kingcheck")
         for row in boardlayout:
             print(row)
         #Assert to test king check 
-        self.assertEqual(boardlayout[4][5], 'WK')
-        self.assertEqual(boardlayout[6][7], 'WP')
-        self.assertEqual(boardlayout[4][2], 'WK')
+        self.assertEqual(boardlayout[5][5], 'WK')
+        self.assertEqual(boardlayout[4][4], 'WP')
         boardlayout[4][4] = '--'
         boardlayout[6][4] = 'WP'
-        boardlayout[3][3] = '--'
+        boardlayout[5][5] = '--'
         boardlayout[1][3] = 'BP'
-        boardlayout[4][0] = '--'
+        boardlayout[4][3] = '--'
         boardlayout[1][0] = 'BP'
         boardlayout[7][4] = 'WK'
+        boardlayout[2][0] = '--'
         main.TURN = 0
 
     
     def test_pin(self):
-        movePeice(1,4,2,4) # move black pawn two
-        movePeice(0,3,4,7) # move black queen to pin the pawn
-        movePeice(6,4,5,4) # move white pawn two
+        movePeice(6,0,5,0) # move white pawn one 
+        main.TURN += 1
+        movePeice(1,4,2,4) # move black pawn one
+        main.TURN += 1
+        movePeice(5,0,4,0) # move white pawn one
+        main.TURN += 1
+        movePeice(0,3,4,7) # move black queen 
+        main.TURN += 1
+        movePeice(6,4,5,4) # move white pawn one
+        main.TURN += 1
+        movePeice(1,7,2,7) # move black pawn one
+        main.TURN += 1
         movePeice(7,4,6,4) # move white king one
+        main.TURN += 1
+        movePeice(2,7,3,7) # move black pawn one 
+        main.TURN += 1
         movePeice(6,4,5,3) # move white king one
-        movePeice(5,4,4,4) # move white pawn one 
-        movePeice(5,3,4,3) # move white king one
-        movePeice(4,4,3,4) # Pawn does not move because of pin
+        main.TURN += 1
+        movePeice(4,7,5,7) # move black queen to pin the pawn  
+        main.TURN += 1
+        movePeice(5,4,4,4) # move white pawn one (shouldn't move)
+        main.TURN += 1
+        movePeice(7,3,5,5) # move white queen to block the pin (should move)
+        main.TURN += 1
+        movePeice(5,7,5,5) # black queen take white queen
+        main.TURN += 1
+        movePeice(5,4,4,4) # move white pawn one (shouldn't move)
+        main.TURN += 1
+        movePeice(5,3,4,3) # move white king 
+        main.TURN += 1
+        movePeice(3,7,4,7) # move black pawn
+        main.TURN += 1
+        movePeice(5,4,4,4) # move white pawn (should move)
+        
         print("board after test_pin")
         for row in boardlayout:
             print(row)
         #Assert to test pin
         self.assertEqual(boardlayout[4][4], 'WP')
         self.assertEqual(boardlayout[3][4], '--')
-    
+        #reset for next test
+        boardlayout[0][3] = 'BK'
+        boardlayout[1][4] = "BP"
+        boardlayout[1][7] = 'BP'
+        boardlayout[2][4] = '--'
+        boardlayout[4][0] = '--'
+        boardlayout[4][3] = '--'
+        boardlayout[4][4] = '--'
+        boardlayout[4][7] = '--'
+        boardlayout[5][5] = '--'
+        boardlayout[6][0] = 'WP'
+        boardlayout[6][4] = 'WP'
+        boardlayout[7][3] = 'WQ'
+        boardlayout[7][4] = 'WK'
+        main.TURN = 0
+        
     def test_invalidKingMove(self):
         movePeice(7,4,5,4) # white king tries to move two spaces
         movePeice(7,4,7,6) # white king tries to move three spaces
