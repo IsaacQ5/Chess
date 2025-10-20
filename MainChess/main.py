@@ -2,6 +2,7 @@ ROWS= 8
 COLS = 8
 boardlayout = [['--' for _ in range(COLS)] for _ in range(ROWS)]
 TURN = 0
+EndGame = False
 
 #makes the pawns for the board 
 def pawns(boardlayout):
@@ -49,25 +50,31 @@ def movePeice(startingRow, startingCol, endRow, endCol):
                 PawnPromotion(endRow, endCol, "B")
     wkr, wkc, bkr, bkc = Findking()
     if kingInCheck(wkr, wkc, bkr, bkc):
-        if Checkmate(startingRow, startingCol, endRow, endCol):     
+        if Checkmate(wkr, wkc, bkr, bkc):     
             print('you loose')
+            global EndGame 
+            EndGame = True
         else:
             print("That move put your king in check, make a valid move")
-            boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
-            boardlayout[endRow][endCol] = SavedPeice
-            TURN -= 1
+        boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
+        boardlayout[endRow][endCol] = SavedPeice
+        TURN -= 1
     else:
         print("make a valid move debug 2")
 
-def Checkmate(startingRow, startingCol, endRow, endCol):
+def Checkmate(wkr, wkc, bkr, bkc):
     dir =   [ (-1,1), (0,1), (1,1),
               (-1,0), (0,0), (1,0),
               (-1,-1), (0,-1),(1,-1)
             ]
     for d in dir:
         x,y = d
-        if not kingInCheck(startingRow, startingCol, endRow+x, endCol+y):
-            return False
+        if "W" not in boardlayout[wkr+x][ wkc+y]:
+            if not kingInCheck(wkr, wkc, wkr+x, wkc+y):
+                return False
+        elif "B" not in boardlayout[bkr+x][bkc+y]:
+            if not kingInCheck(bkr, bkc, bkr+x, bkc+y):
+                return False
         return True
         
 
@@ -390,6 +397,9 @@ def end(inputs):
 def Main():
     global TURN
     while True:
+        if EndGame == True:
+            print('The loop broke')
+            break
         #for formating the list into a board 
         for line in range(len(boardlayout)):
             print(boardlayout[line])    
