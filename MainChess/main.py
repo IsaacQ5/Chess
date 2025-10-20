@@ -47,15 +47,31 @@ def movePeice(startingRow, startingCol, endRow, endCol):
                 PawnPromotion(endRow, endCol, "W")
             else:
                 PawnPromotion(endRow, endCol, "B")
-    if KingInCheck():
-        print("That move put your king in check, make a valid move")
-        boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
-        boardlayout[endRow][endCol] = SavedPeice
-        TURN -= 1
+    wkr, wkc, bkr, bkc = Findking()
+    if kingInCheck(wkr, wkc, bkr, bkc):
+        if Checkmate(startingRow, startingCol, endRow, endCol):     
+            print('you loose')
+        else:
+            print("That move put your king in check, make a valid move")
+            boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
+            boardlayout[endRow][endCol] = SavedPeice
+            TURN -= 1
     else:
         print("make a valid move debug 2")
 
-def KingInCheck():
+def Checkmate(startingRow, startingCol, endRow, endCol):
+    dir =   [ (-1,1), (0,1), (1,1),
+              (-1,0), (0,0), (1,0),
+              (-1,-1), (0,-1),(1,-1)
+            ]
+    for d in dir:
+        x,y = d
+        if not kingInCheck(startingRow, startingCol, endRow+x, endCol+y):
+            return False
+        return True
+        
+
+def Findking():
     #find the kings
     WhiteKingRow = 0
     WhiteKingCol = 0
@@ -76,8 +92,10 @@ def KingInCheck():
                 BlackKingCol = col
                 FoundBK = True
             if FoundWK and FoundBK:
-                break
-    
+                return (WhiteKingRow, WhiteKingCol, BlackKingRow, BlackKingCol)
+            
+
+def kingInCheck(WhiteKingRow, WhiteKingCol, BlackKingRow, BlackKingCol):
     for row in range(ROWS):
         for col in range(COLS):
             if checkPeice(row, col, WhiteKingRow, WhiteKingCol) and TURN % 2 == 0:
