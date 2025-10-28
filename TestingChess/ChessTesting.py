@@ -667,6 +667,7 @@ class TestChess(unittest.TestCase):
             print(row)
         self.assertEqual(boardlayout[1][5], 'WQ' )
         self.assertEqual(boardlayout[0][4], 'BK')
+        #reset for next test
         boardlayout[1][0] = 'BP'
         boardlayout[1][4] = 'BP'
         boardlayout[1][5] = 'BP'
@@ -678,5 +679,29 @@ class TestChess(unittest.TestCase):
         boardlayout[7][3] = 'WQ'
         boardlayout[7][5] = 'WB'
         main.TURN = 0
+    
+    def test_castle(self):
+        movePeice(7,6,5,7) # move white knight
+        movePeice(6,6,5,6) # move white pawn 
+        movePeice(7,5,6,6) # move white bishop 
+        movePeice(7,4,7,7) # castle 
+        print("Board after test_castle")
+        for row in boardlayout:
+            print(row)
+        #testing castle 
+        self.assertEqual(boardlayout[7][6], "WK")
+        self.assertEqual(boardlayout[7][5], 'WR')
+        #reset for next test 
+        boardlayout[7][6] = 'WN'
+        boardlayout[5][7] = '--'
+        boardlayout[6][6] = 'WP'
+        boardlayout[5][6] = '--'
+        boardlayout[7][5] = 'WB'
+        boardlayout[6][6] = '--'
+        boardlayout[7][7] = 'WR'
+        boardlayout[7][4] = 'WK'
+        for row in boardlayout:
+            print(row)
+
 if __name__ == "__main__":
     unittest.main()
