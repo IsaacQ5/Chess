@@ -3,9 +3,9 @@ from unittest.mock import patch
 import os
 import sys
 
-
+#since the test file is not in the same dir as the chess file 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
-# Ensure the project root is in sys.path for module imports
+  #Ensure the project root is in sys.path for module imports
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
