@@ -646,6 +646,62 @@ class TestChess(unittest.TestCase):
         # Assert that the king did not move from (7,4) to (5,4) or (7,6)
         self.assertEqual(boardlayout[7][4], 'WK')
 
+    def test_QueensGambit(self):
+        movePeice(6,4,5,4) # Move white pawn
+        main.TURN += 1
+        movePeice(1,4,3,4) # Move Black pawn
+        main.TURN += 1
+        movePeice(7,5,4,2) # move white bishop 
+        main.TURN += 1
+        movePeice(1,0,2,0) # move black pawn
+        main.TURN += 1
+        movePeice(7,3,5,5) # move white queen
+        main.TURN += 1
+        movePeice(2,0,3,0) # move black pawn 
+        main.TURN += 1
+        movePeice(5,5,1,5) # checkmate with queen
+        main.TURN += 1
+        movePeice(0,4,1,5) # black king show not move
+        print("Board after test_QueensGambit")
+        for row in boardlayout:
+            print(row)
+        self.assertEqual(boardlayout[1][5], 'WQ' )
+        self.assertEqual(boardlayout[0][4], 'BK')
+        #reset for next test
+        boardlayout[1][0] = 'BP'
+        boardlayout[1][4] = 'BP'
+        boardlayout[1][5] = 'BP'
+        boardlayout[3][0] = '--'
+        boardlayout[3][4] = '--'
+        boardlayout[4][2] = '--'
+        boardlayout[5][4] = '--'
+        boardlayout[6][4] = 'WP'
+        boardlayout[7][3] = 'WQ'
+        boardlayout[7][5] = 'WB'
+        main.TURN = 0
+    
+    def test_castle(self):
+        movePeice(7,6,5,7) # move white knight
+        movePeice(6,6,5,6) # move white pawn 
+        movePeice(7,5,6,6) # move white bishop 
+        movePeice(7,4,7,7) # castle 
+        print("Board after test_castle")
+        for row in boardlayout:
+            print(row)
+        #testing castle 
+        self.assertEqual(boardlayout[7][6], "WK")
+        self.assertEqual(boardlayout[7][5], 'WR')
+        #reset for next test 
+        boardlayout[7][6] = 'WN'
+        boardlayout[5][7] = '--'
+        boardlayout[6][6] = 'WP'
+        boardlayout[5][6] = '--'
+        boardlayout[7][5] = 'WB'
+        boardlayout[6][6] = '--'
+        boardlayout[7][7] = 'WR'
+        boardlayout[7][4] = 'WK'
+        for row in boardlayout:
+            print(row)
 
 if __name__ == "__main__":
     unittest.main()

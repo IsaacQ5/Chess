@@ -2,6 +2,9 @@ ROWS= 8
 COLS = 8
 boardlayout = [['--' for _ in range(COLS)] for _ in range(ROWS)]
 TURN = 0
+EndGame = False
+CanCastleW = True
+CanCastleB = True
 
 #makes the pawns for the board 
 def pawns(boardlayout):
@@ -47,15 +50,37 @@ def movePeice(startingRow, startingCol, endRow, endCol):
                 PawnPromotion(endRow, endCol, "W")
             else:
                 PawnPromotion(endRow, endCol, "B")
-    if KingInCheck():
-        print("That move put your king in check, make a valid move")
+    wkr, wkc, bkr, bkc = Findking()
+    if kingInCheck(wkr, wkc, bkr, bkc):
+        if Checkmate(wkr, wkc, bkr, bkc):     
+            print('you loose')
+            global EndGame 
+            EndGame = True
+        else:
+            print("That move put your king in check, make a valid move")
         boardlayout[startingRow][startingCol] = boardlayout[endRow][endCol]
         boardlayout[endRow][endCol] = SavedPeice
         TURN -= 1
     else:
         print("make a valid move debug 2")
 
-def KingInCheck():
+def Checkmate(wkr, wkc, bkr, bkc):
+    dir =   [ (-1,1), (0,1), (1,1),
+              (-1,0), (0,0), (1,0),
+              (-1,-1), (0,-1),(1,-1)
+            ]
+    for d in dir:
+        x,y = d
+        if "W" not in boardlayout[wkr+x][ wkc+y]:
+            if not kingInCheck(wkr, wkc, wkr+x, wkc+y):
+                return False
+        elif "B" not in boardlayout[bkr+x][bkc+y]:
+            if not kingInCheck(bkr, bkc, bkr+x, bkc+y):
+                return False
+        return True
+        
+
+def Findking():
     #find the kings
     WhiteKingRow = 0
     WhiteKingCol = 0
@@ -76,8 +101,10 @@ def KingInCheck():
                 BlackKingCol = col
                 FoundBK = True
             if FoundWK and FoundBK:
-                break
-    
+                return (WhiteKingRow, WhiteKingCol, BlackKingRow, BlackKingCol)
+            
+
+def kingInCheck(WhiteKingRow, WhiteKingCol, BlackKingRow, BlackKingCol):
     for row in range(ROWS):
         for col in range(COLS):
             if checkPeice(row, col, WhiteKingRow, WhiteKingCol) and TURN % 2 == 0:
@@ -115,15 +142,40 @@ def checkPeice(startingRow, startingCol, endRow, endCol):
         return False 
 
 def checkKing(startingRow, startingCol, endRow, endCol):
+    global CanCastleW
+    global CanCastleB
     if [startingRow, startingCol] != [endRow, endCol]:
         if (abs(startingRow - endRow) == 1 or startingRow - endRow == 0) and (abs(startingCol - endCol) == 1 or startingCol - endCol == 0): 
             if 'W' in boardlayout[startingRow][startingCol] and 'W' not in boardlayout[endRow][endCol]:
+                CanCastleW = False
                 return True 
             elif 'B' in boardlayout[startingRow][startingCol] and'B' not in boardlayout[endRow][endCol]:
+                CanCastleB = False
                 return True
             return False
         return False 
+    elif startingRow == 7 and startingCol == 4 and boardlayout[startingRow][startingCol] == 'WK' and CanCastleW:
+        if endRow == 7 and endCol == 7:
+            if boardlayout[7][5] == '--' and boardlayout[7][6] == '--':
+                CanCastleW = False
+                return True 
+        elif endRow == 7 and endCol == 0:
+            if boardlayout[7][3] == '--' and boardlayout[7][2] == '--' and boardlayout[7][1] == '--':
+                CanCastleW = False 
+                return True 
+        return False 
+    elif startingRow == 0 and startingCol == 4 and boardlayout[startingRow][startingCol] == 'BK' and CanCastleB:
+        if endRow == 0:
+            if endCol == 0 and boardlayout[0][1] == '--' and boardlayout[0][2] == '--' and boardlayout[0][3] == '--':
+                CanCastleB = False
+                return True
+            elif endCol == 7 and boardlayout[0][6] == '--' and boardlayout[0][5] == '--':
+                CanCastleB = False
+                return True
+            return False
+        return False
     return False 
+
 
 def checkQueen(startingRow, startingCol, endRow, endCol):
     if boardlayout[startingRow][startingCol] == 'WQ':
@@ -372,6 +424,9 @@ def end(inputs):
 def Main():
     global TURN
     while True:
+        if EndGame == True:
+            print('The loop broke')
+            break
         #for formating the list into a board 
         for line in range(len(boardlayout)):
             print(boardlayout[line])    
@@ -401,6 +456,7 @@ def Main():
                 print("That is not your peice")
         else:
             print("Put in a vaild number debug 1")
+
 if __name__ == "__main__":
     peices()
     Main()
